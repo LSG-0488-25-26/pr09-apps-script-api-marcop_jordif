@@ -17,7 +17,7 @@ interface ApiService {
     suspend fun getCardsByType(
         @Query("api_key") apiKey: String,
         @Query("action") action: String = "getCardsByType",
-        @Query("type") type: String
+        @Query("type") type: String? = null // ARREGLAR!!!!!!!!!!!!!!!!!!!!
     ): ApiResponse<List<Map<String, Any>>>
 
     @GET("exec")
