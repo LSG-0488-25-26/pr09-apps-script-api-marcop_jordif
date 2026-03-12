@@ -1,7 +1,7 @@
 // data/remote/ApiService.kt
-package com.tuapp.dokkanbattle.data.remote
+package com.example.dokkanapi.data.remote
 
-import com.tuapp.dokkanbattle.data.model.ApiResponse
+import com.example.dokkanapi.data.model.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

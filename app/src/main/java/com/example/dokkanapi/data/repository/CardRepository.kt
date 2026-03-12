@@ -1,8 +1,8 @@
 package com.example.dokkanapi.data.repository
 
-import com.tuapp.dokkanbattle.data.mapper.CardMapper
-import com.tuapp.dokkanbattle.data.model.Card
-import com.tuapp.dokkanbattle.data.remote.ApiService
+import com.example.dokkanapi.data.mapper.CardMapper
+import com.example.dokkanapi.data.model.Card
+import com.example.dokkanapi.data.remote.ApiService
 
 class CardRepository(
     private val apiService: ApiService
@@ -13,7 +13,6 @@ class CardRepository(
             val response = apiService.getAllCards(apiKey)
 
             if (response.success && response.data != null) {
-                // 👇 AQUÍ USES EL MAPPER
                 val cards = CardMapper.mapToCardList(response.data)
                 Result.success(cards)
             } else {
@@ -26,12 +25,11 @@ class CardRepository(
 
     suspend fun getCardsByType(apiKey: String, type: String): Result<List<Card>> {
         return try {
+            // Aquesta línia és CORRECTA si ApiService té @Query("type") type: String
             val response = apiService.getCardsByType(apiKey, type)
 
             if (response.success && response.data != null) {
-                // 👇 AQUÍ TAMBÉ
-                val cards = CardMapper.mapToCardList(response.data)
-                Result.success(cards)
+                Result.success(CardMapper.mapToCardList(response.data))
             } else {
                 Result.failure(Exception(response.error ?: "Error desconegut"))
             }

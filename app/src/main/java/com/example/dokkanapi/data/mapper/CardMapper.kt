@@ -1,7 +1,7 @@
 // CardMapper.kt
-package com.tuapp.dokkanbattle.data.mapper
+package com.example.dokkanapi.data.mapper
 
-import com.tuapp.dokkanbattle.data.model.Card
+import com.example.dokkanapi.data.model.Card
 
 object CardMapper {
 
