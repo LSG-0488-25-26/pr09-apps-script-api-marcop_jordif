@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.example.dokkanapi"
-    compileSdk = 34  // Versio del SDK per compilar
+    compileSdk = 36  // Versio del SDK per compilar
 
     defaultConfig {
         applicationId = "com.example.dokkanapi"
         minSdk = 24  // Versio minima d'Android suportada
-        targetSdk = 34  // Versio per la qual esta optimitzada
+        targetSdk = 36  // Versio per la qual esta optimitzada
         versionCode = 1
         versionName = "1.0"
 
@@ -86,6 +86,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material3)
 
     // ===== FIREBASE (si ho necessites) =====
     // Aquesta llibreria es per distribuir l'app, normalment no es necessita
