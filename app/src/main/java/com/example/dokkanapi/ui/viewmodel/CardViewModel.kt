@@ -1,10 +1,9 @@
-// ui/viewmodel/CardViewModel.kt
-package com.tuapp.dokkanbattle.ui.viewmodel
+package com.example.dokkanapi.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dokkanapi.domain.useCase.GetCardsUseCase
 import com.tuapp.dokkanbattle.data.model.Card
-import com.tuapp.dokkanbattle.domain.usecase.GetCardsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

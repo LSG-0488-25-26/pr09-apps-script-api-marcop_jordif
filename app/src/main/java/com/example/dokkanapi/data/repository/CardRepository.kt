@@ -1,5 +1,4 @@
-// data/repository/CardRepository.kt
-package com.tuapp.dokkanbattle.data.repository
+package com.example.dokkanapi.data.repository
 
 import com.tuapp.dokkanbattle.data.mapper.CardMapper
 import com.tuapp.dokkanbattle.data.model.Card

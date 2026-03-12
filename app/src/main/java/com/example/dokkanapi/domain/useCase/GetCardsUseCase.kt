@@ -1,8 +1,7 @@
-// domain/usecase/GetCardsUseCase.kt
-package com.tuapp.dokkanbattle.domain.usecase
+package com.example.dokkanapi.domain.useCase
 
+import com.example.dokkanapi.data.repository.CardRepository
 import com.tuapp.dokkanbattle.data.model.Card
-import com.tuapp.dokkanbattle.data.repository.CardRepository
 
 class GetCardsUseCase(
     private val repository: CardRepository
