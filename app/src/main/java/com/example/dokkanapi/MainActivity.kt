@@ -5,35 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import com.example.dokkanapi.data.remote.ApiService
+import androidx.compose.ui.Modifier
 import com.example.dokkanapi.data.repository.CardRepository
+import com.example.dokkanapi.data.remote.RetrofitClient
 import com.example.dokkanapi.domain.useCase.GetCardsByTypeUseCase
 import com.example.dokkanapi.domain.useCase.GetCardsUseCase
+import com.example.dokkanapi.ui.screens.CardListScreen
 import com.example.dokkanapi.ui.theme.DokkanApiTheme
 import com.example.dokkanapi.ui.viewmodel.CardViewModel
 import com.example.dokkanapi.ui.viewmodel.CardViewModelFactory
-import com.example.dokkanbattle.ui.screens.BASE_URL
-import com.example.dokkanbattle.ui.screens.CardListScreen
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
 
 class MainActivity : ComponentActivity() {
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-        coerceInputValues = true
-    }
-
-    private val apiService: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .build()
-            .create(ApiService::class.java)
-    }
+    private val apiService = RetrofitClient.apiService
 
     private val viewModel: CardViewModel by viewModels {
         val repository = CardRepository(apiService)
@@ -48,8 +34,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DokkanApiTheme {
-                Scaffold {
-                    CardListScreen(viewModel = viewModel)
+                Scaffold { paddingValues ->
+                    CardListScreen(
+                        viewModel = viewModel,
+                        modifier = Modifier.padding(paddingValues)
+                    )
                 }
             }
         }

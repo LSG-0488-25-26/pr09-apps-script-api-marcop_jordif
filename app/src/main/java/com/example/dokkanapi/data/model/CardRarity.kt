@@ -1,4 +1,4 @@
-package com.example.dokkanbattle.data.model
+package com.example.dokkanapi.data.model
 
 enum class CardRarity(val level: Int, val maxLevel: Int) {
     N(1, 20),

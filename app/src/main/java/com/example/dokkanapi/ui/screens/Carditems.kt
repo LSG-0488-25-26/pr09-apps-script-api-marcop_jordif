@@ -1,4 +1,4 @@
-package com.example.dokkanbattle.ui.screens
+package com.example.dokkanapi.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

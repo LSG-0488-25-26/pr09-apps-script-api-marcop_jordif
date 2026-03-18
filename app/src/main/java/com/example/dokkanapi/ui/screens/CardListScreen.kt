@@ -1,4 +1,4 @@
-package com.example.dokkanbattle.ui.screens
+package com.example.dokkanapi.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,10 +22,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dokkanapi.data.model.Card
 import com.example.dokkanapi.ui.viewmodel.CardViewModel
+import com.example.dokkanpi.ui.screens.StatsTab
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardListScreen(viewModel: CardViewModel = viewModel()) {
+fun CardListScreen(viewModel: CardViewModel = viewModel(), modifier: Modifier) {
     val cards     by viewModel.cards.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error     by viewModel.error.collectAsState()

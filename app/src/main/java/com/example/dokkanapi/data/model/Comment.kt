@@ -1,4 +1,4 @@
-package com.example.dokkanbattle.data.model
+package com.example.dokkanapi.data.model
 
 import kotlinx.serialization.Serializable
 

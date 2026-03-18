@@ -10,25 +10,23 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    // TODO: Canvia aquesta URL per la teva URL real de Apps Script
-    private const val BASE_URL = "https://script.google.com/macros/s/AKfycbyiHzDN6D6oCE_dHQi5B8SViZpuNj5aEtcBvHH7tmjpngRlYTgq8paxDuKUemCkgfNiAQ/"
+    private const val BASE_URL = "https://script.google.com/macros/s/AKfycbxLAvVdpj-bsPdg5VtYxPX0bS5CuygQOcp2Tc81SfE4ddag9smXF8WBAGcQXssYsESHsg/"
 
-    // Configuració de Json per ignorar camps desconeguts
     private val json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
     }
 
-    // Configuració del client OkHttp amb logging
     private val client = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
+        .followRedirects(true)
+        .followSslRedirects(true)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    // Configuració de Retrofit
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -37,7 +35,6 @@ object RetrofitClient {
             .build()
     }
 
-    // Creació de l'ApiService - AQUÍ ESTÀ LA CLAU
     val apiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }

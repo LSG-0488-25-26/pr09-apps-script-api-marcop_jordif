@@ -1,4 +1,4 @@
-package com.example.dokkanbattle.ui.screens
+package com.example.dokkanpi.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +15,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dokkanapi.data.model.Card
+import com.example.dokkanapi.ui.screens.rarityColor
+import com.example.dokkanapi.ui.screens.typeColor
 
 @Composable
 fun StatsTab(cards: List<Card>) {

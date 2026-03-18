@@ -17,9 +17,4 @@ interface ApiService {
         @Query("action") action: String = "getCardsByType",
         @Query("type") type: String
     ): ApiResponse<List<JsonObject>>
-
-    @GET("exec")
-    suspend fun getComments(
-        @Query("action") action: String = "getComments"
-    ): ApiResponse<List<JsonObject>>
 }
