@@ -1,4 +1,4 @@
-package com.tuapp.dokkanbattle.data.model
+package com.example.dokkanbattle.data.model
 
 enum class CardType(val displayName: String, val color: String) {
     STR("STR", "Rojo"),
