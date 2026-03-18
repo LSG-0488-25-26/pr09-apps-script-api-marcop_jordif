@@ -8,9 +8,9 @@ class CardRepository(
     private val apiService: ApiService
 ) {
 
-    suspend fun getAllCards(apiKey: String): Result<List<Card>> {
+    suspend fun getAllCards(): Result<List<Card>> {
         return try {
-            val response = apiService.getAllCards(apiKey)
+            val response = apiService.getAllCards()
             if (response.success && response.data != null) {
                 Result.success(CardMapper.mapToCardList(response.data))
             } else {
@@ -21,13 +21,9 @@ class CardRepository(
         }
     }
 
-    suspend fun getCardsByType(apiKey: String, type: String): Result<List<Card>> {
+    suspend fun getCardsByType(type: String): Result<List<Card>> {
         return try {
-            val response = apiService.getCardsByType(
-                apiKey = apiKey,
-                action = "getCardsByType",
-                type = type
-            )
+            val response = apiService.getCardsByType(type = type)
             if (response.success && response.data != null) {
                 Result.success(CardMapper.mapToCardList(response.data))
             } else {

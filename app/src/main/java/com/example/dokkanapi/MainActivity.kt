@@ -13,6 +13,7 @@ import com.example.dokkanapi.domain.useCase.GetCardsUseCase
 import com.example.dokkanapi.ui.theme.DokkanApiTheme
 import com.example.dokkanapi.ui.viewmodel.CardViewModel
 import com.example.dokkanapi.ui.viewmodel.CardViewModelFactory
+import com.example.dokkanbattle.ui.screens.BASE_URL
 import com.example.dokkanbattle.ui.screens.CardListScreen
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -28,7 +29,7 @@ class MainActivity : ComponentActivity() {
 
     private val apiService: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl("https://script.google.com/macros/s/YOUR_SCRIPT_ID/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(ApiService::class.java)
@@ -36,11 +37,10 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: CardViewModel by viewModels {
         val repository = CardRepository(apiService)
-        val cardViewModelFactory = CardViewModelFactory(
-            com.example.dokkanapi.domain.useCase.GetCardsUseCase(repository),
+        CardViewModelFactory(
+            GetCardsUseCase(repository),
             GetCardsByTypeUseCase(repository)
         )
-        cardViewModelFactory
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -37,13 +37,13 @@ fun CardListScreen(viewModel: CardViewModel = viewModel()) {
     val types = listOf("ALL", "STR", "AGL", "TEQ", "INT", "PHY")
     val tabs  = listOf("Cards", "Buscar", "Stats")
 
-    LaunchedEffect(Unit) { viewModel.loadCards(API_KEY) }
+    LaunchedEffect(Unit) { viewModel.loadCards() }
 
     LaunchedEffect(selectedType) {
         if (selectedType == null || selectedType == "ALL")
-            viewModel.loadCards(API_KEY)
+            viewModel.loadCards()
         else
-            viewModel.loadCardsByType(API_KEY, selectedType!!)
+            viewModel.loadCardsByType(selectedType!!)
     }
 
     selectedCard?.let { card ->

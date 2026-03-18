@@ -2,7 +2,7 @@ package com.example.dokkanbattle.ui.screens
 
 import androidx.compose.ui.graphics.Color
 
-const val API_KEY = "dokkan123"
+const val BASE_URL = "https://script.google.com/macros/s/AKfycbxLAvVdpj-bsPdg5VtYxPX0bS5CuygQOcp2Tc81SfE4ddag9smXF8WBAGcQXssYsESHsg/"
 
 fun typeColor(type: String): Color = when (type.uppercase()) {
     "STR" -> Color(0xFFE53935)

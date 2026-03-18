@@ -23,36 +23,30 @@ class CardViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    fun loadCards(apiKey: String) {
+    fun loadCards() {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-
-            val result: Result<List<Card>> = getCardsUseCase(apiKey)
-
+            val result: Result<List<Card>> = getCardsUseCase()
             result.onSuccess { cardList: List<Card> ->
                 _cards.value = cardList
             }.onFailure { exception: Throwable ->
                 _error.value = exception.message
             }
-
             _isLoading.value = false
         }
     }
 
-    fun loadCardsByType(apiKey: String, type: String) {
+    fun loadCardsByType(type: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-
-            val result: Result<List<Card>> = getCardsByTypeUseCase(apiKey, type)
-
+            val result: Result<List<Card>> = getCardsByTypeUseCase(type)
             result.onSuccess { cardList: List<Card> ->
                 _cards.value = cardList
             }.onFailure { exception: Throwable ->
                 _error.value = exception.message
             }
-
             _isLoading.value = false
         }
     }
