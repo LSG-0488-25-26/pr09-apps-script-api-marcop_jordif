@@ -2,7 +2,7 @@ package com.example.dokkanapi.ui.screens
 
 import androidx.compose.ui.graphics.Color
 
-const val BASE_URL = "https://script.google.com/macros/s/AKfycbxLAvVdpj-bsPdg5VtYxPX0bS5CuygQOcp2Tc81SfE4ddag9smXF8WBAGcQXssYsESHsg/\n"
+private const val BASE_URL = "https://script.google.com/macros/s/AKfycbxLAvVdpj-bsPdg5VtYxPX0bS5CuygQOcp2Tc81SfE4ddag9smXF8WBAGcQXssYsESHsg/"
 
 fun typeColor(type: String): Color = when (type.uppercase()) {
     "STR" -> Color(0xFFE53935)

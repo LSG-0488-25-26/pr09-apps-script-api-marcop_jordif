@@ -2,6 +2,7 @@ package com.example.dokkanapi.data.remote
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,14 +16,49 @@ object RetrofitClient {
     private val json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
+        isLenient = true
+    }
+
+    private val redirectInterceptor = Interceptor { chain ->
+        val originalRequest = chain.request()
+        var response = chain.proceed(originalRequest)
+        var redirectCount = 0
+        val maxRedirects = 5
+
+        println("Peticio inicial: ${originalRequest.url}")
+
+        while (response.isRedirect && redirectCount < maxRedirects) {
+            val location = response.header("Location")
+            println("Redireccio ${redirectCount + 1} a: $location")
+
+            if (location.isNullOrEmpty()) break
+
+            response.close()
+
+            val redirectRequest = originalRequest.newBuilder()
+                .url(location)
+                .header("Accept", "application/json")
+                .build()
+
+            response = chain.proceed(redirectRequest)
+            redirectCount++
+        }
+
+        println("Content-Type: ${response.header("Content-Type")}")
+        println("Codi resposta: ${response.code}")
+
+        response
+    }
+
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val client = OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        })
-        .followRedirects(true)
-        .followSslRedirects(true)
+        .addInterceptor(redirectInterceptor)
+        .addInterceptor(loggingInterceptor)
+        .followRedirects(false)
+        .followSslRedirects(false)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
