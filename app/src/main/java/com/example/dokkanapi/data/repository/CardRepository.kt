@@ -13,6 +13,10 @@ class CardRepository(
         return try {
             println("Sol licitant getAllCards")
             val response = apiService.getAllCards()
+            response.data?.firstOrNull()?.let { first ->
+                android.util.Log.d("CARD_KEYS", first.keys.joinToString(", "))
+                android.util.Log.d("CARD_FIRST", first.toString())
+            }
             println("Resposta rebuda: success=${response.success}, count=${response.count}")
 
             if (response.success && response.data != null) {
