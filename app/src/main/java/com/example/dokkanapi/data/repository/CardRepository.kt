@@ -11,10 +11,8 @@ class CardRepository(
     suspend fun getAllCards(apiKey: String): Result<List<Card>> {
         return try {
             val response = apiService.getAllCards(apiKey)
-
             if (response.success && response.data != null) {
-                val cards = CardMapper.mapToCardList(response.data)
-                Result.success(cards)
+                Result.success(CardMapper.mapToCardList(response.data))
             } else {
                 Result.failure(Exception(response.error ?: "Error desconegut"))
             }
@@ -25,9 +23,11 @@ class CardRepository(
 
     suspend fun getCardsByType(apiKey: String, type: String): Result<List<Card>> {
         return try {
-            // Aquesta línia és CORRECTA si ApiService té @Query("type") type: String
-            val response = apiService.getCardsByType(apiKey, type)
-
+            val response = apiService.getCardsByType(
+                apiKey = apiKey,
+                action = "getCardsByType",
+                type = type
+            )
             if (response.success && response.data != null) {
                 Result.success(CardMapper.mapToCardList(response.data))
             } else {

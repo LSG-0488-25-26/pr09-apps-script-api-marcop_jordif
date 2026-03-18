@@ -1,4 +1,4 @@
-package com.example.dokkanapi.domain.usecase
+package com.example.dokkanapi.domain.useCase
 
 import com.example.dokkanapi.data.model.Card
 import com.example.dokkanapi.data.repository.CardRepository

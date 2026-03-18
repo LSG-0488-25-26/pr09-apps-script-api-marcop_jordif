@@ -4,20 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dokkanapi.data.model.Card
 import com.example.dokkanapi.domain.useCase.GetCardsUseCase
-import com.example.dokkanapi.domain.usecase.GetCardsByTypeUseCase
+import com.example.dokkanapi.domain.useCase.GetCardsByTypeUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CardViewModel(
     private val getCardsUseCase: GetCardsUseCase,
-    private val getCardsByTypeUseCase: GetCardsByTypeUseCase  // AFEGIT
+    private val getCardsByTypeUseCase: GetCardsByTypeUseCase
 ) : ViewModel() {
 
     private val _cards = MutableStateFlow<List<Card>>(emptyList())
     val cards: StateFlow<List<Card>> = _cards
 
-    private val _isLoading = MutableStateFlow(false)
+    private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _error = MutableStateFlow<String?>(null)
@@ -28,11 +28,11 @@ class CardViewModel(
             _isLoading.value = true
             _error.value = null
 
-            val result = getCardsUseCase(apiKey)
+            val result: Result<List<Card>> = getCardsUseCase(apiKey)
 
-            result.onSuccess { cards ->
-                _cards.value = cards
-            }.onFailure { exception ->
+            result.onSuccess { cardList: List<Card> ->
+                _cards.value = cardList
+            }.onFailure { exception: Throwable ->
                 _error.value = exception.message
             }
 
@@ -40,18 +40,16 @@ class CardViewModel(
         }
     }
 
-    // NOVA FUNCIO
     fun loadCardsByType(apiKey: String, type: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
 
-            // PASSEM ELS DOS PARAMETRES
-            val result = getCardsByTypeUseCase(apiKey, type)
+            val result: Result<List<Card>> = getCardsByTypeUseCase(apiKey, type)
 
-            result.onSuccess { cards ->
-                _cards.value = cards
-            }.onFailure { exception ->
+            result.onSuccess { cardList: List<Card> ->
+                _cards.value = cardList
+            }.onFailure { exception: Throwable ->
                 _error.value = exception.message
             }
 

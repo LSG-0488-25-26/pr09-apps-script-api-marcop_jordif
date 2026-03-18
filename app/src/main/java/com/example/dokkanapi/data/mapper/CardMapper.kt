@@ -1,48 +1,69 @@
-// CardMapper.kt
 package com.example.dokkanapi.data.mapper
 
 import com.example.dokkanapi.data.model.Card
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 object CardMapper {
 
-    fun mapToCard(data: Map<String, Any>): Card {
+    fun mapToCard(data: JsonObject): Card {
+        fun str(vararg keys: String): String {
+            for (key in keys) {
+                val v = data[key]?.jsonPrimitive?.contentOrNull
+                if (!v.isNullOrEmpty()) return v
+            }
+            return ""
+        }
+
+        fun strOrNull(vararg keys: String): String? {
+            for (key in keys) {
+                val v = data[key]?.jsonPrimitive?.contentOrNull
+                if (!v.isNullOrEmpty()) return v
+            }
+            return null
+        }
+
+        fun int(vararg keys: String): Int {
+            for (key in keys) {
+                val v = data[key]?.jsonPrimitive?.intOrNull
+                if (v != null) return v
+            }
+            return 0
+        }
+
+        fun list(vararg keys: String): List<String> {
+            for (key in keys) {
+                val arr = runCatching { data[key]?.jsonArray }.getOrNull()
+                if (arr != null) return arr.map { it.jsonPrimitive.contentOrNull ?: "" }
+            }
+            return emptyList()
+        }
+
         return Card(
-            id = data["id"]?.toString() ?: "",
-            title = data["Card's title"]?.toString()
-                ?: data["title"]?.toString()
-                ?: "Sense títol",
-            name = data["character"]?.toString()
-                ?: data["name"]?.toString()
-                ?: "Desconegut",
-            type = data["Card's Type"]?.toString()
-                ?: data["type"]?.toString()
-                ?: "UNKNOWN",
-            rarity = data["Card's Rarity"]?.toString()
-                ?: data["rarity"]?.toString()
-                ?: "UNKNOWN",
-            hp = (data["hp"] as? Number)?.toInt() ?: 0,
-            attack = (data["atk"] as? Number)?.toInt() ?: 0,
-            defense = (data["def"] as? Number)?.toInt() ?: 0,
-            cost = (data["cost"] as? Number)?.toInt() ?: 0,
-            leaderSkill = data["leader_skill"]?.toString()
-                ?: data["leaderSkill"]?.toString()
-                ?: "",
-            superAttack = data["super_attack"]?.toString()
-                ?: data["superAttack"]?.toString()
-                ?: "",
-            passiveSkill = data["passive_skill"]?.toString()
-                ?: data["passiveSkill"]?.toString()
-                ?: "",
-            linkSkills = (data["link_skills"] as? List<*>)?.map { it?.toString() ?: "" }
-                ?: emptyList(),
-            categories = (data["categories"] as? List<*>)?.map { it?.toString() ?: "" }
-                ?: emptyList(),
-            jpRelease = data["jp_release"]?.toString(),
-            globalRelease = data["global_release"]?.toString()
+            id = str("id"),
+            title = str("Card's title", "title"),
+            name = str("character", "name"),
+            type = str("Card's Type", "type").ifEmpty { "UNKNOWN" },
+            rarity = str("Card's Rarity", "rarity").ifEmpty { "UNKNOWN" },
+            hp = int("hp"),
+            attack = int("atk", "attack"),
+            defense = int("def", "defense"),
+            cost = int("cost"),
+            leaderSkill = str("leader_skill", "leaderSkill"),
+            superAttack = str("super_attack", "superAttack"),
+            passiveSkill = str("passive_skill", "passiveSkill"),
+            linkSkills = list("link_skills", "linkSkills"),
+            categories = list("categories"),
+            jpRelease = strOrNull("jp_release", "jpRelease"),
+            globalRelease = strOrNull("global_release", "globalRelease")
         )
     }
 
-    fun mapToCardList(dataList: List<Map<String, Any>>): List<Card> {
+    fun mapToCardList(dataList: List<JsonObject>): List<Card> {
         return dataList.map { mapToCard(it) }
     }
 }

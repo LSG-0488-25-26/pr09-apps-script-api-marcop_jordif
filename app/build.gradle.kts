@@ -19,6 +19,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packaging {
+        resources {
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/*.kotlin_module"
+            excludes += "META-INF/*.properties"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false  // No ofusquem el codi

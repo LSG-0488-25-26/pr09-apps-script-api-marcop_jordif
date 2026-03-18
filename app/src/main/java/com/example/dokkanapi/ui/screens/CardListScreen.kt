@@ -1,5 +1,5 @@
 // ui/screens/CardListScreen.kt
-package com.tuapp.dokkanbattle.ui.screens
+package com.example.dokkanbattle.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
