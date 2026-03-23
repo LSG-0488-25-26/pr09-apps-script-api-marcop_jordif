@@ -3,7 +3,8 @@ package com.example.dokkanapi.data.repository
 import com.example.dokkanapi.data.mapper.CardMapper
 import com.example.dokkanapi.data.model.Card
 import com.example.dokkanapi.data.remote.ApiService
-import java.io.IOException
+
+private const val API_KEY = "dokkan1919"
 
 class CardRepository(
     private val apiService: ApiService
@@ -11,64 +12,26 @@ class CardRepository(
 
     suspend fun getAllCards(): Result<List<Card>> {
         return try {
-            println("Sol licitant getAllCards")
-            val response = apiService.getAllCards()
-            response.data?.firstOrNull()?.let { first ->
-                android.util.Log.d("CARD_KEYS", first.keys.joinToString(", "))
-                android.util.Log.d("CARD_FIRST", first.toString())
-            }
-            println("Resposta rebuda: success=${response.success}, count=${response.count}")
-
+            val response = apiService.getAllCards(apiKey = API_KEY)
             if (response.success && response.data != null) {
-                val cards = CardMapper.mapToCardList(response.data)
-                println("Cards mapejades: ${cards.size}")
-                Result.success(cards)
+                Result.success(CardMapper.mapToCardList(response.data))
             } else {
-                val errorMsg = response.error ?: "Error desconegut"
-                println("Error a la resposta: $errorMsg")
-                Result.failure(Exception("Error de l'API: $errorMsg"))
+                Result.failure(Exception(response.error ?: "Error desconegut"))
             }
-        } catch (e: retrofit2.HttpException) {
-            println("Error HTTP: ${e.code()} - ${e.message()}")
-            val errorBody = e.response()?.errorBody()?.string()
-            println("Cos d error: $errorBody")
-            Result.failure(IOException("Error HTTP ${e.code()}: ${e.message()}"))
-        } catch (e: kotlinx.serialization.SerializationException) {
-            println("Error de serialitzacio: ${e.message}")
-            Result.failure(Exception("Error en processar les dades: ${e.message}"))
         } catch (e: Exception) {
-            println("Error inesperat: ${e.message}")
-            e.printStackTrace()
             Result.failure(e)
         }
     }
 
     suspend fun getCardsByType(type: String): Result<List<Card>> {
         return try {
-            println("Sol licitant getCardsByType: $type")
-            val response = apiService.getCardsByType(type = type)
-            println("Resposta rebuda: success=${response.success}, count=${response.count}")
-
+            val response = apiService.getCardsByType(apiKey = API_KEY, type = type)
             if (response.success && response.data != null) {
-                val cards = CardMapper.mapToCardList(response.data)
-                println("Cards mapejades: ${cards.size}")
-                Result.success(cards)
+                Result.success(CardMapper.mapToCardList(response.data))
             } else {
-                val errorMsg = response.error ?: "Error desconegut"
-                println("Error a la resposta: $errorMsg")
-                Result.failure(Exception("Error de l'API: $errorMsg"))
+                Result.failure(Exception(response.error ?: "Error desconegut"))
             }
-        } catch (e: retrofit2.HttpException) {
-            println("Error HTTP: ${e.code()} - ${e.message()}")
-            val errorBody = e.response()?.errorBody()?.string()
-            println("Cos d error: $errorBody")
-            Result.failure(IOException("Error HTTP ${e.code()}: ${e.message()}"))
-        } catch (e: kotlinx.serialization.SerializationException) {
-            println("Error de serialitzacio: ${e.message}")
-            Result.failure(Exception("Error en processar les dades: ${e.message}"))
         } catch (e: Exception) {
-            println("Error inesperat: ${e.message}")
-            e.printStackTrace()
             Result.failure(e)
         }
     }
