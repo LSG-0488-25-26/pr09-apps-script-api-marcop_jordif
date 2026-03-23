@@ -1,4 +1,4 @@
-package com.example.dokkanapi.ui.screens
+package com.example.dokkanbattle.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,11 +21,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dokkanapi.data.model.Card
 import com.example.dokkanapi.ui.viewmodel.CardViewModel
+import com.example.dokkanapi.ui.screens.*
 import com.example.dokkanpi.ui.screens.StatsTab
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardListScreen(viewModel: CardViewModel = viewModel(), modifier: Modifier) {
+fun CardListScreen(viewModel: CardViewModel = viewModel()) {
     val cards     by viewModel.cards.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error     by viewModel.error.collectAsState()
@@ -48,7 +48,7 @@ fun CardListScreen(viewModel: CardViewModel = viewModel(), modifier: Modifier) {
     }
 
     selectedCard?.let { card ->
-        CardDetailScreen(card = card, onBack = { selectedCard = null })
+        CardDetailScreen(card = card, viewModel = viewModel, onBack = { selectedCard = null })
         return
     }
 
@@ -78,7 +78,7 @@ fun CardListScreen(viewModel: CardViewModel = viewModel(), modifier: Modifier) {
                     containerColor = Color.Transparent,
                     contentColor = Color(0xFFFFD700),
                     indicator = { tabPositions ->
-                        SecondaryIndicator(
+                        TabRowDefaults.SecondaryIndicator(
                             modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
                             color = Color(0xFFFFD700)
                         )

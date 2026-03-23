@@ -3,15 +3,17 @@ package com.example.dokkanapi.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dokkanapi.data.model.Card
-import com.example.dokkanapi.domain.useCase.GetCardsUseCase
+import com.example.dokkanapi.domain.useCase.AddCommentUseCase
 import com.example.dokkanapi.domain.useCase.GetCardsByTypeUseCase
+import com.example.dokkanapi.domain.useCase.GetCardsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CardViewModel(
     private val getCardsUseCase: GetCardsUseCase,
-    private val getCardsByTypeUseCase: GetCardsByTypeUseCase
+    private val getCardsByTypeUseCase: GetCardsByTypeUseCase,
+    private val addCommentUseCase: AddCommentUseCase
 ) : ViewModel() {
 
     private val _cards = MutableStateFlow<List<Card>>(emptyList())
@@ -23,16 +25,16 @@ class CardViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
+    private val _commentResult = MutableStateFlow<String?>(null)
+    val commentResult: StateFlow<String?> = _commentResult
+
     fun loadCards() {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-            val result: Result<List<Card>> = getCardsUseCase()
-            result.onSuccess { cardList: List<Card> ->
-                _cards.value = cardList
-            }.onFailure { exception: Throwable ->
-                _error.value = exception.message
-            }
+            getCardsUseCase()
+                .onSuccess { _cards.value = it }
+                .onFailure { _error.value = it.message }
             _isLoading.value = false
         }
     }
@@ -41,13 +43,22 @@ class CardViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-            val result: Result<List<Card>> = getCardsByTypeUseCase(type)
-            result.onSuccess { cardList: List<Card> ->
-                _cards.value = cardList
-            }.onFailure { exception: Throwable ->
-                _error.value = exception.message
-            }
+            getCardsByTypeUseCase(type)
+                .onSuccess { _cards.value = it }
+                .onFailure { _error.value = it.message }
             _isLoading.value = false
         }
+    }
+
+    fun addComment(cardId: String, user: String, comment: String) {
+        viewModelScope.launch {
+            addCommentUseCase(cardId, user, comment)
+                .onSuccess { _commentResult.value = "Comentari afegit!" }
+                .onFailure { _commentResult.value = "Error: ${it.message}" }
+        }
+    }
+
+    fun clearCommentResult() {
+        _commentResult.value = null
     }
 }

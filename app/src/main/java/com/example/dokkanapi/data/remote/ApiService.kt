@@ -3,6 +3,7 @@ package com.example.dokkanapi.data.remote
 import com.example.dokkanapi.data.model.ApiResponse
 import kotlinx.serialization.json.JsonObject
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ApiService {
@@ -25,4 +26,13 @@ interface ApiService {
         @Query("api_key") apiKey: String,
         @Query("action") action: String = "getComments"
     ): ApiResponse<List<JsonObject>>
+
+    @POST("exec")
+    suspend fun addComment(
+        @Query("api_key") apiKey: String,
+        @Query("action") action: String = "addComment",
+        @Query("card_id") cardId: String,
+        @Query("user") user: String,
+        @Query("comment") comment: String
+    ): ApiResponse<JsonObject?>
 }

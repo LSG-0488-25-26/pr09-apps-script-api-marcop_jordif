@@ -35,4 +35,22 @@ class CardRepository(
             Result.failure(e)
         }
     }
+
+    suspend fun addComment(cardId: String, user: String, comment: String): Result<Unit> {
+        return try {
+            val response = apiService.addComment(
+                apiKey  = API_KEY,
+                cardId  = cardId,
+                user    = user,
+                comment = comment
+            )
+            if (response.success) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception(response.error ?: "Error afegint comentari"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
